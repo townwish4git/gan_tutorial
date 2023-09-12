@@ -113,11 +113,11 @@ $$W(P||Q) = \mathop{inf}\limits_{\gamma\sim\prod(P,Q)}\mathbb{E}_{(x,y)\sim\ga
 
 <br>
 
-**Kantorovich-Rubinstein对偶理论**可以证明W距离等价于：
+W距离复杂的形式使得直接优化它变得十分困难，但幸运地是**Kantorovich-Rubinstein对偶理论**可以证明W距离等价于：
 
 $$\begin{equation}W(P||Q) = \frac{1}{K}\mathop{sup}\limits_{||f||_{L}\leq K}\left( \mathbb{E}[f(P)]- \mathbb{E}[f(Q)] \right)\end{equation}$$
 
-当我们因此当我们
+这一等价形式与GANs的训练模式不谋而合，当我们
 
 1. 将D限制在L-K连续的范畴中 并且
 
