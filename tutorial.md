@@ -1,8 +1,6 @@
 # GANs图像生成
 
-<center>
-   <img src="./img/main.png", width=50%>
-</center>
+<p align="center"><img src="./img/main.png" width=30%></p>
 
 ## 什么是GANs  
 生成对抗网络（Generative Adversarial Networks，GANs）是一种生成式机器学习框架，它能够学习真实图像数据（或音乐、语音或文本数据）的分布，进而通过模仿真实图像生成能以假乱真的伪造图像数据。GANs最早由深度学习领域专家Ian Goodfellow等人在 2014 年的论文[Generative Adversarial Nets](https://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf)中提出。近年来，GANs一直是一个活跃的研究主题，人工智能领域专家 Yann LeCun 称对抗性训练是机器学习领域“过去 10 年来最有趣的想法”。  
@@ -15,7 +13,7 @@ GANs主要由两个不同的模型构成：**生成器**和**判别器**。其�
 我们利用数学符号更详细地表述以上过程：  
 ### 生成器
 
-<center><img src="./img/datadis.PNG", width=90%></center>
+<p align="center"><img src="./img/datadis.PNG" width=90%></p>
 
 我们记图像空间为 $\mathbf{X}$ ，图像空间中的任意一个点 $x\in\mathbf{X}$ 代表一张具体的图像。图像 $x_1,x_2,...,x_n$ 代表训练集中的样本，它们取自总体为 $X_{data}$ 的真实数据分布。上图中的蓝色部分表示了分布 $X_{data}$ ，其中的黑点表示采样自该分布的训练集样本。  
 <br>
@@ -49,7 +47,7 @@ $$\begin{equation}\mathop{min}\limits_{G}\mathop{max}\limits_{D}V(D,G)=\mathbb{E
 
 原论文给出了训练过程的伪代码如下：
 
-<center><img src="./img/algo1.PNG", width=95%></center>
+<p align="center"><img src="./img/algo1.PNG" width=95%></p>
 
 <br>
 
@@ -157,7 +155,7 @@ for idx in range(cols * rows):
 plt.show()
 ```
 
-<center><img src="./img/real_data.png", width=50%></center>
+<p align="center"><img src="./img/real_data.png" width=50%></p>
 
 <br>
 
@@ -412,7 +410,7 @@ plt.legend()
 plt.show()
 ```
 
-<center><img src="./img/loss.png", width=70%></center>
+<p align="center"><img src="./img/loss.png" width=70%></p>
 
 <br>
 
@@ -432,7 +430,7 @@ ani = animation.ArtistAnimation(fig, show_list, interval=1000, repeat_delay=1000
 ani.save('train_test.gif', writer='pillow', fps=1)
 ```
 
-<center><img src="./img/train_test.gif", width=80%></center>
+<p align="center"><img src="./img/train_test.gif" width=80%></p>
 
 <br>
 
@@ -457,7 +455,7 @@ for i in range(25):
 plt.show()
 ```
 
-<center><img src="./img/final_test.png", width=60%></center>
+<p align="center"><img src="./img/final_test.png" width=60%></p>
 
 <br>
 
