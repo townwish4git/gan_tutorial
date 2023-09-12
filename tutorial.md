@@ -1,6 +1,6 @@
 # GANs图像生成
 
-![main](./img/main.png)
+<center><img src="./img/main.png", width=50%></center>
 
 ## 什么是GANs  
 生成对抗网络（Generative Adversarial Networks，GANs）是一种生成式机器学习框架，它能够学习真实图像数据（或音乐、语音或文本数据）的分布，进而通过模仿真实图像生成能以假乱真的伪造图像数据。GANs最早由深度学习领域专家Ian Goodfellow等人在 2014 年的论文[Generative Adversarial Nets](https://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf)中提出。近年来，GANs一直是一个活跃的研究主题，人工智能领域专家 Yann LeCun 称对抗性训练是机器学习领域“过去 10 年来最有趣的想法”。  
@@ -12,39 +12,41 @@ GANs主要由两个不同的模型构成：**生成器**和**判别器**。其�
 
 我们利用数学符号更详细地表述以上过程：  
 ### 生成器
-![real data distribution](./img/datadis.PNG)
-我们记图像空间为$\mathbf{X}$，图像空间中的任意一个点$x\in\mathbf{X}$代表一张具体的图像。图像$x_1,x_2,...,x_n$代表训练集中的样本，它们取自总体为$X_{data}$的真实数据分布。上图中的蓝色部分表示了分布$X_{data}$，其中的黑点表示采样自该分布的训练集样本。  
+
+<center><img src="./img/datadis.PNG", width=90%></center>
+
+我们记图像空间为 $ \mathbf{X} $ ，图像空间中的任意一个点 $ x\in\mathbf{X} $ 代表一张具体的图像。图像 $ x_1,x_2,...,x_n $ 代表训练集中的样本，它们取自总体为 $ X_{data} $ 的真实数据分布。上图中的蓝色部分表示了分布 $ X_{data} $ ，其中的黑点表示采样自该分布的训练集样本。  
 <br>
 
-我们记$z$是隐空间中取自随机噪声分布$Z$的样本点（该例中我们选取$Z$为标准正态分布），我们称之为隐码（latent code），生成器$G$将隐码$z$从隐空间映射到图像空间进而生成了一张伪造图像$x_g=G(z)$，更一般地，$G$将隐空间中的分布$Z$映射为图像空间中的分布$X_g\triangleq G(Z)$。  
+我们记 $ z $ 是隐空间中取自随机噪声分布 $ Z $ 的样本点（该例中我们选取 $ Z $ 为标准正态分布），我们称之为隐码（latent code），生成器 $ G $ 将隐码 $ z $ 从隐空间映射到图像空间进而生成了一张伪造图像 $ x_g=G(z) $ ，更一般地， $ G $ 将隐空间中的分布 $ Z $ 映射为图像空间中的分布 $ X_g\triangleq G(Z) $ 。  
 <br>
 
-我们希望生成器生成的图像能够以假乱真，这意味着我们希望伪造数据的分布$X_g$能够尽量和真实数据分布$X_{data}$接近甚至是一致。在数学上我们有许多工具（例如KL散度、JS散度等）能够直接衡量两个分布之间的差异，但这些工具的优化问题往往比较棘手。而GANs通过判别器间接衡量两者差异，通过判别器和生成器的交替训练来优化这一问题。  
+我们希望生成器生成的图像能够以假乱真，这意味着我们希望伪造数据的分布 $ X_g $ 能够尽量和真实数据分布 $ X_{data} $ 接近甚至是一致。在数学上我们有许多工具（例如KL散度、JS散度等）能够直接衡量两个分布之间的差异，但这些工具的优化问题往往比较棘手。而GANs通过判别器间接衡量两者差异，通过判别器和生成器的交替训练来优化这一问题。  
 <br>
 
 ### 判别器
 
-延续上面的记号，记图像空间$\mathbf{X}$中的任意一点$x\in\mathbf{X}$代表一张具体的图像。$D$是判定图像真假的判别器模型，通过计算$D(x)$，模型将输出一个取值范围为$[0,1]$的标量，该标量表示样本$\bold{x}$取自真实数据分布而非生成器生成的概率。直观来说，判别器接受真实图片输入后应当尽量输出接近1的值，而输入生成器生成的伪造图片时则输出尽量接近于0的值，这与我们常见的二元分类任务别无二致。  
+延续上面的记号，记图像空间 $ \mathbf{X} $ 中的任意一点 $ x\in\mathbf{X} $ 代表一张具体的图像。 $ D $ 是判定图像真假的判别器模型，通过计算 $ D(x) $ ，模型将输出一个取值范围为 $ [0,1] $ 的标量，该标量表示样本 $ \bold{x} $ 取自真实数据分布而非生成器生成的概率。直观来说，判别器接受真实图片输入后应当尽量输出接近1的值，而输入生成器生成的伪造图片时则输出尽量接近于0的值，这与我们常见的二元分类任务别无二致。  
 <br>
 
 ### 训练
 
-在二元分类任务中，我们常常采用二元交叉熵（Binary Cross Entropy，BCE）作为任务的损失函数。当$x$为正例时，BCE以$-log(D(x))$作为分类模型$D$的损失；当$x$为负例时，损失为$-log(1-D(x))$，在本教程的生成任务中，上述两项分别对应$-\mathbb{E}_{x\sim X_{data}}[log(D(x))]$和$-\mathbb{E}_{z\sim Z}[log(1-D(G(z)))]$，因此对于给定的生成器$G$和判别器$D$，判别器的损失函数为
+在二元分类任务中，我们常常采用二元交叉熵（Binary Cross Entropy，BCE）作为任务的损失函数。当 $ x $ 为正例时，BCE以 $ -log(D(x)) $ 作为分类模型 $ D $ 的损失；当 $ x $ 为负例时，损失为 $ -log(1-D(x)) $ ，在本教程的生成任务中，上述两项分别对应 $ -\mathbb{E}_{x\sim X_{data}}[log(D(x))] $ 和 $ -\mathbb{E}_{z\sim Z}[log(1-D(G(z)))] $ ，因此对于给定的生成器 $ G $ 和判别器 $ D $ ，判别器的损失函数为
 
 $$\begin{equation}loss(D,G)=-\mathbb{E}_{x\sim X_{data}}[log(D(x))]-\mathbb{E}_{z\sim Z}[log(1-D(G(z)))].\end{equation}$$  
 
-在判别器的训练过程中，我们调整判别器模型$D$的参数以最小化该损失函数，进而优化模型使$D$能够更好地分辨图像真。  
+在判别器的训练过程中，我们调整判别器模型 $ D $ 的参数以最小化该损失函数，进而优化模型使 $ D $ 能够更好地分辨图像真。  
 <br>
 
-而对于生成器而言，其目标是生成更逼真的图片来以假乱真地瞒过$D$的判断，因此在生成器模型的训练过程中，我们调整$G$的参数以最大化损失函数（1），更具体地说，是最大化其中与$G$相关的$-\mathbb{E}_{z\sim Z}[log(1-D(G(z)))]$一项。  
+而对于生成器而言，其目标是生成更逼真的图片来以假乱真地瞒过 $ D $ 的判断，因此在生成器模型的训练过程中，我们调整 $ G $ 的参数以最大化损失函数（1），更具体地说，是最大化其中与 $ G $ 相关的 $ -\mathbb{E}_{z\sim Z}[log(1-D(G(z)))] $ 一项。  
 <br>
 
-我们交替进行判别器和生成器的训练，令两者在对抗中学习，从而使生成器学会模拟生成真实数据的分布。为与原论文记号保持一致，我们记$V(D,G)=-loss(D,G)$，则上述任务可以表示为
+我们交替进行判别器和生成器的训练，令两者在对抗中学习，从而使生成器学会模拟生成真实数据的分布。为与原论文记号保持一致，我们记 $ V(D,G)=-loss(D,G) $ ，则上述任务可以表示为
 $$\begin{equation}\mathop{min}\limits_{G}\mathop{max}\limits_{D}V(D,G)=\mathbb{E}_{x\sim X_{data}}[log(D(x))]+\mathbb{E}_{z\sim Z}[log(1-D(G(z)))].\end{equation}$$  
 
 原论文给出了训练过程的伪代码如下：
-![algorithm](./img/algo1.PNG)
 
+<center><img src="./img/algo1.PNG", width=95%></center>
 
 ## MindSpore实践  
 
@@ -80,7 +82,7 @@ beta2 = 0.999       # 优化器（Adam）参数beta2
 
 ### 数据集
 
-MNIST手写数字数据集是NIST数据集的子集，共有70000张手写数字图片，包含60000张训练样本和10000张测试样本，样本为1*28*28单通道图片，以二进制文件形式存储。  
+[MNIST手写数字数据集](http://yann.lecun.com/exdb/mnist/)是NIST数据集的子集，共有70000张手写数字图片，包含60000张训练样本和10000张测试样本，样本为1*28*28单通道图片，以二进制文件形式存储。  
 
 **数据集下载**  
 
@@ -141,7 +143,7 @@ for idx in range(cols * rows):
 plt.show()
 ```
 
-![图片](./img/real_data.png)
+<center><img src="./img/real_data.png", width=50%></center>
 
 <br>
 
@@ -149,10 +151,10 @@ plt.show()
 
 **生成器**
 
-生成器$G$将隐空间中的向量$z$映射到图像空间，从而生成伪造的图片。由于我们的训练数据是MNIST数据集中的手写图像，因此将$z$映射到图像空间意味着最终生成一个与训练图像大小（1x28x28）相同的灰度图。在实践中，我们通常使用神经网络作为生成器，关于生成器模型结构的具体设计是GANs研究的一个重要方向。  
+生成器 $ G $ 将隐空间中的向量 $ z $ 映射到图像空间，从而生成伪造的图片。由于我们的训练数据是MNIST数据集中的手写图像，因此将 $ z $ 映射到图像空间意味着最终生成一个与训练图像大小（1x28x28）相同的灰度图。在实践中，我们通常使用神经网络作为生成器，关于生成器模型结构的具体设计是GANs研究的一个重要方向。  
 <br>
 
-本教程中我们沿用原始论文中的设定，尝试使用多层感知机（Multilayer Perceptron，MLP）作为生成器模型，模型接受维度为`latent_dim`一维向量$z$为输入，输出大小为1x28x28的图像数据。该模型由五层全连接层`mindspore.nn.Dense()`构成，除第一层和最后一层以外都后接`mindspore.nn.BatchNorm1d()`做批归一化，除最后一层以外都后接`mindspore.nn.ReLU()`作为激活函数，最后一层后接mindspore.nn.Tanh()将生成图像的像素值归一化到$[-1,1]$范围内。
+本教程中我们沿用原始论文中的设定，尝试使用多层感知机（Multilayer Perceptron，MLP）作为生成器模型，模型接受维度为`latent_dim`一维向量 $ z $ 为输入，输出大小为1x28x28的图像数据。该模型由五层全连接层`mindspore.nn.Dense()`构成，除第一层和最后一层以外都后接`mindspore.nn.BatchNorm1d()`做批归一化，除最后一层以外都后接`mindspore.nn.ReLU()`作为激活函数，最后一层后接mindspore.nn.Tanh()将生成图像的像素值归一化到 $ [-1,1] $ 范围内。
 
 ```python
 # 生成器模型构造
@@ -194,10 +196,10 @@ net_g.update_parameters_name('generator')
 
 **判别器** 
 
-判别器$D$是一个二元分类网络，$D$接受图像数据作为输入，并输出该图像取自真实数据分布的概率。事实上这种二元分类模型在过往发展中有过许多相关研究，并且仍在不断采纳新的计算机视觉判别模型推陈出新。  
+判别器 $ D $ 是一个二元分类网络， $ D $ 接受图像数据作为输入，并输出该图像取自真实数据分布的概率。事实上这种二元分类模型在过往发展中有过许多相关研究，并且仍在不断采纳新的计算机视觉判别模型推陈出新。  
 <br>
 
-本教程中我们沿用原始论文的设定，仍尝试使用多层感知机作为判别器模型。模型输入为大小1x28x28的图像数据，输出$[0,1]$之间的标量。模型由三层全连接层`mindspore.nn.Dense()`构成，除最后一层以外都后接`mindspore.nn.ReLU()`作为激活函数，最后一层后接`mindspore.nn.Sigmoid()`将输出值规范到$[0,1]$之间。
+本教程中我们沿用原始论文的设定，仍尝试使用多层感知机作为判别器模型。模型输入为大小1x28x28的图像数据，输出 $ [0,1] $ 之间的标量。模型由三层全连接层`mindspore.nn.Dense()`构成，除最后一层以外都后接`mindspore.nn.ReLU()`作为激活函数，最后一层后接`mindspore.nn.Sigmoid()`将输出值规范到 $ [0,1] $ 之间。
 
 ```python
 # 判别器模型构造
@@ -246,13 +248,13 @@ fixed_noise = Tensor(np.random.normal(size=(25, latent_size)), dtype.float32)
 
 **训练**
 
-接下来我们进入GAN的训练过程。在训练过程中，我们交替地更新判别器$D$和生成器$G$的参数。  
+接下来我们进入GAN的训练过程。在训练过程中，我们交替地更新判别器 $ D $ 和生成器 $ G $ 的参数。  
 <br>
 
-对于判别器$D$，我们遵循ganhacks总结出的训练技巧，将真实图像和伪造图像分别构造成两个全真和全伪两个批次，分别计算两个批次的损失函数，并将其相加从而计算出$D$总的损失函数。  
+对于判别器 $ D $ ，我们遵循[ganhacks](https://github.com/soumith/ganhacks)总结出的训练技巧，将真实图像和伪造图像分别构造成两个全真和全伪两个批次，分别计算两个批次的损失函数，并将其相加从而计算出 $ D $ 总的损失函数。  
 <br>
 
-对于生成器$G$，我们参照作者在NIPS 2016上提出的改进方案，将优化目标从$\mathop{min}\limits_{G}\mathbb{E}_{z\sim Z}[log(1-D(G(z)))]$修改为$\mathop{max}\limits_{G}\mathbb{E}_{z\sim Z}[log(D(G(z)))]$从而缓解训练中的梯度消失问题。
+对于生成器 $ G $ ，我们参照作者在[NIPS 2016](https://arxiv.org/pdf/1701.00160.pdf)上提出的改进方案，将优化目标从 $ \mathop{min}\limits_{G}\mathbb{E}_{z\sim Z}[log(1-D(G(z)))] $ 修改为 $ \mathop{max}\limits_{G}\mathbb{E}_{z\sim Z}[log(D(G(z)))] $ 从而缓解训练中的梯度消失问题。
 ```python
 checkpoints_path = "./result/checkpoints"  # 结果保存路径
 image_path = "./result/images"  # 测试结果保存路径
@@ -370,7 +372,7 @@ time of epoch 200 is 10.22s
 
 ## 训练结果
 
-我们通过matplotlib展示$D$和$G$随迭代轮次的变化情况：
+我们通过matplotlib展示 $ D $ 和 $ G $ 随迭代轮次的变化情况：
 ```python
 plt.figure(figsize=(6, 4))
 plt.title("Generator and Discriminator Loss During Training")
@@ -383,7 +385,8 @@ plt.ylabel("Loss")
 plt.legend()
 plt.show()
 ```
-![图片](./img/loss.png)
+
+<center><img src="./img/loss.png", width=70%></center>
 
 
 利用之前生成的固定隐码`fixed_noise`，观察不同迭代轮次生成器生成的图像`G(fixed_noise)`质量，保存为gif文件：
@@ -401,7 +404,7 @@ ani = animation.ArtistAnimation(fig, show_list, interval=1000, repeat_delay=1000
 ani.save('train_test.gif', writer='pillow', fps=1)
 ```
 
-![图片](./img/train_test.gif)
+<center><img src="./img/train_test.gif", width=80%></center>
 
 **模型推理** 
 
@@ -422,7 +425,8 @@ for i in range(25):
     plt.imshow(images[i].squeeze(), cmap="gray")
 plt.show()
 ```
-![图片](./img/final_test.png)
+
+<center><img src="./img/final_test.png", width=60%></center>
 
 ## 后续工作
 
