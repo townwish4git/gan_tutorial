@@ -125,7 +125,7 @@ $$\begin{equation}W(P||Q) = \frac{1}{K}\mathop{sup}\limits_{||f||_{L}\leq K}\l
 
 此时得到的
 
-$$D^ * \approx\mathop{argsup}\limits_ {f:||f||_ L\leq K}\left( \mathbb{E}[f(P_ {data})] - \mathbb{E}[D(Z)] \right)$$
+$$D^ * \approx\mathop{argsup}\limits_ {f:||f||_ L\leq K}\left( \mathbb{E}[f(P_ {data})] - \mathbb{E}[f(G(Z))] \right)$$
 
 因此，此时再训练G使得
 
@@ -140,7 +140,8 @@ $$\mathop{min}\limits_ {G}\left( \mathbb{E}_ {x\sim p_ {data}(x)}[D^ * (x)] -
 $$\mathbb{E}_ {x\sim p_{data}(x)}[D(x)] - \mathbb{E}_ {z}[D(G(z))]$$
 对比GAN中的
 $$\mathbb{E}_ {x\sim p_{data}(x)}\left[log(D(x)\right] + \mathbb{E}_ {z\sim p_{z}(z)}\left[log(1-D(G(z))\right]$$
-2. 我们需要训练D去拟合达到（1）中sup条件的 $f$ ，我们有 $f$ 为K-Lipschiz连续的限制，因此我们设计的鉴别器模型也应当是L-K连续的。为保证这一条件，3.  我们并没有 $f:x\mapsto [0, 1]$ 的假定，因此鉴别器D的最后一层无需添加sigmoid层
+2. 我们需要训练D去拟合达到（1）中sup条件的 $f$ ，我们有 $f$ 为K-Lipschiz连续的限制，因此我们设计的鉴别器模型也应当是L-K连续的。为保证这一条件，论文作者提出强制性地将判别器参数截断到 $[-c,c]$ 之间，其中 $c\geq 0$ 是一个超参数；
+3. 我们并没有 $f:x\mapsto [0, 1]$ 的假定，因此鉴别器D的最后一层无需添加sigmoid层
 4. 为了使D能够更好拟合满足 $\mathop{sup}\limits_{||f||_L\leq K}$ 的 $f$ ，我们会对D训练多轮，因此D和G的训练频次n：1比例往往较大（对比GAN往往1：1地训练D和G）
 5. 当固定G，多轮训练D后，损失函数近似等价于最小化真实分布和G伪造的数据分布之间的EM距离
 $$\mathbb{E}_ {x\sim p_{data}(x)}[D(x)] - \mathbb{E}_ {z}[D(G(z))]\approx W\left(P_{data}||G\left(z\right)\right)$$
