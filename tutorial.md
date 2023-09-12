@@ -462,4 +462,6 @@ plt.show()
 
 ## 后续工作
 
-基于GANs，提出了许多进一步
+基于GANs，许多进一步的工作被逐渐提出。这些工作从模型结构、损失函数、训练过程等方面对原始GAN加以改进，在特定领域获得了更加优秀的应用效果。
+
+在`MindSpore`教程中提供了部分改进模型的原理分析和具体实现，请[点击这里](https://mindspore.cn/tutorials/application/zh-CN/r2.1/index.html)获取进一步的了解。
