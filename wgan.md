@@ -94,31 +94,44 @@ $$KL(P_{G}||P_{real}) = -\int_x p_G(x)\log\frac{p_{real}(x)}{p_G(x)}dx$$
 
 ### 理论分析
 
-WGAN中考虑用Earth-Moving（或称作Wasserstein距离）替代JS散度:
+从上述的讨论中我们能够看出，如果GANs优化目标等价于优化真实数据分布 $P_{real}$ 和生成数据分布 $P_{G}$之间的距离（散度）
 
-$$EM(P||Q) = \mathop{inf}\limits_{\gamma\sim\prod(P,Q)}\mathbb{E}_{(x,y)\sim\gamma}||x-y||$$
-，其中:
-- $\prod(P,Q)$ 是所有边缘分布为P和Q的联合分布组成的集合；
-- EM/Wasserstein距离：分布P变成分布Q的“最短路径”
+$$D(P_{real}, P_{G})$$
 
-Kantorovich-Rubinstein对偶理论可以证明EM距离等价于：
+则这个距离度量最好满足：
+1. 两个分布支撑集交集为空时，距离不恒为常数；
+2. 对称性：$D(P_{real}, P_{G}) = D(P_{G}, P_{real})$
 
-$$\begin{equation}EM(P||Q) = \frac{1}{K}\mathop{sup}\limits_{||f||_{L}\leq K}\left( \mathbb{E}[f(P)]- \mathbb{E}[f(Q)] \right)\end{equation}$$
+以上两点分别对应梯度消失问题和模式崩溃问题。
+
+<br>
+
+Wasserstein距离（或称作Earth-Moving，推土机距离）即满足上述两点：
+
+$$W(P||Q) = \mathop{inf}\limits_{\gamma\sim\prod(P,Q)}\mathbb{E}_{(x,y)\sim\gamma}||x-y||$$
+，其中 $\prod(P,Q)$ 是所有边缘分布为P和Q的联合分布组成的集合。Wasserstein距离直观上表示分布P变成分布Q的“最短路径”。
+
+<br>
+
+**Kantorovich-Rubinstein对偶理论**可以证明W距离等价于：
+
+$$\begin{equation}W(P||Q) = \frac{1}{K}\mathop{sup}\limits_{||f||_{L}\leq K}\left( \mathbb{E}[f(P)]- \mathbb{E}[f(Q)] \right)\end{equation}$$
 
 当我们因此当我们
 
-  1. 将D限制在L-K连续的范畴中 并且
-  2. 迭代训练D使得 $\mathbb{E}_ {x\sim p_{data}(x)}[D(x)] - \mathbb{E}_{z}[D(G(z))]$ 最大化
+1. 将D限制在L-K连续的范畴中 并且
 
-，此时得到的
+2. 迭代训练D使得 $\mathbb{E}_ {x\sim p_{data}(x)}[D(x)] - \mathbb{E}_{z}[D(G(z))]$ 最大化
+
+此时得到的
 
 $$D^ * \approx\mathop{argsup}\limits_ {f:||f||_ L\leq K}\left( \mathbb{E}[f(P_ {data})] - \mathbb{E}[D(Z)] \right)$$
 
-因此此时再训练G使得
+因此，此时再训练G使得
 
 $$\mathop{min}\limits_ {G}\left( \mathbb{E}_ {x\sim p_ {data}(x)}[D^ * (x)] - \mathbb{E}_ {z}[D^ * (G(z))] \right)$$
 
-近似等价于最小化真实分布和G伪造的数据分布之间的EM距离 $EM(P_{real}||P_{g})$ 
+近似等价于最小化真实分布和G伪造的数据分布之间的W距离 $W(P_{real}||P_{g})$ 
 
 <br>
 
@@ -130,7 +143,7 @@ $$\mathbb{E}_ {x\sim p_{data}(x)}\left[log(D(x)\right] + \mathbb{E}_ {z\sim p_
 2. 我们需要训练D去拟合达到（1）中sup条件的 $f$ ，我们有 $f$ 为K-Lipschiz连续的限制，因此我们设计的鉴别器模型也应当是L-K连续的。为保证这一条件，3.  我们并没有 $f:x\mapsto [0, 1]$ 的假定，因此鉴别器D的最后一层无需添加sigmoid层
 4. 为了使D能够更好拟合满足 $\mathop{sup}\limits_{||f||_L\leq K}$ 的 $f$ ，我们会对D训练多轮，因此D和G的训练频次n：1比例往往较大（对比GAN往往1：1地训练D和G）
 5. 当固定G，多轮训练D后，损失函数近似等价于最小化真实分布和G伪造的数据分布之间的EM距离
-$$\mathbb{E}_ {x\sim p_{data}(x)}[D(x)] - \mathbb{E}_ {z}[D(G(z))]\approx EM\left(P_{data}||G\left(z\right)\right)$$
+$$\mathbb{E}_ {x\sim p_{data}(x)}[D(x)] - \mathbb{E}_ {z}[D(G(z))]\approx W\left(P_{data}||G\left(z\right)\right)$$
 ，该损失函数直接量化了伪造数据和真实数据的差异，因此可以被用来作为评价指标来判断生成器模型是否训练充分
 
 <br>
