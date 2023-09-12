@@ -27,7 +27,7 @@ $$\mathop{min}\limits_{G}\mathbb{E}_ {z\sim Z}[\log (1-D^*(G(z)))]$$
 
 <br>
 
-直观上这个问题的出现也是自然的，当判别器训练较好、生成器生成图像质量较差时，D能轻易地判断出图像是否来自真实分布，即此时 $D^*(G(z))$ 近似恒为0， 因此梯度 $\frac{\partial D^*(G(z))}{\partial G(z)}$ 的值很小，出现梯度下降的情况。
+直观上这个问题的出现也是自然的，当判别器训练较好、生成器生成图像质量较差时，D能轻易地判断出图像是否来自真实分布，即此时 $D^ * (G(z))$ 近似恒为0， 因此梯度 $\frac{\partial D^ * (G(z))} {\partial G(z)}$ 的值很小，出现梯度下降的情况。
 
 <br>
 
@@ -43,9 +43,9 @@ $$\begin{equation}\mathop{max}\limits_{G}\mathbb{E}_ {z\sim Z}[\log (D^*(G(z)))]
 
 <br>
 
-直观上看，当判别器训练较好、生成器生成图像质量较差时，生成图片被判别器置信地判为负例，即 $D^*(G(z))$ 近似为0，此时梯度 $\frac{\partial D^*(G(z))}{\partial G(z)}$ 的值很小，也近似为0；但考虑 $\log$ 函数在0附近的导数为正无穷，则 $\frac{\partial\log (D^*(G(z)))}{\partial D^*(G(z))} \approx \infty$ 。由链式法则：
+直观上看，当判别器训练较好、生成器生成图像质量较差时，生成图片被判别器置信地判为负例，即 $D^ * (G(z))$ 近似为0，此时梯度 $\frac{\partial D^ * (G(z))}{\partial G(z)}$ 的值很小，也近似为0；但考虑 $\log$ 函数在0附近的导数为正无穷，则 $\frac{\partial\log (D^ * (G(z)))}{\partial D^ * (G(z))} \approx \infty$ 。由链式法则：
 
-$$\frac{\partial\log (D^*(G(z)))}{\partial G(z)} = \frac{\partial\log (D^*(G(z)))}{\partial D^*(G(z))}\cdot \frac{\partial D^*(G(z))}{\partial G(z)}$$
+$$\frac{\partial\log (D^ * (G(z)))}{\partial G(z)} = \frac{\partial\log (D^ * (G(z)))}{\partial D^ * (G(z))}\cdot \frac{\partial D^ * (G(z))}{\partial G(z)}$$
 
 右式中的第一项近似看作 $\infty$ ，第二项近似看作0，这种 $0\cdot\infty$型的形式“或许”能把整体梯度拉回一个正常的数值范围中。
 
@@ -77,13 +77,13 @@ $$\mathop{min}\limits_{G}[KL(P_{G}||P_{real})-2JS(P_{real}||P_G)]$$
 
 $$KL(P_{G}||P_{real}) = -\int_x p_G(x)\log\frac{p_{real}(x)}{p_G(x)}dx$$
 
-- 当$p_{real}(x)\rightarrow0,\ p_{G}(x)\rightarrow1$时，$p_G(x)\log\frac{p_{real}(x)}{p_G(x)}\rightarrow-\infty$
-- 当$p_{real}(x)\rightarrow1,\ p_{G}(x)\rightarrow0$时，$p_G(x)\log\frac{p_{real}(x)}{p_G(x)}\rightarrow0$
+- 当 $p_{real}(x)\rightarrow0,\ p_{G}(x)\rightarrow1$ 时， $p_G(x)\log\frac{p_{real}(x)}{p_G(x)}\rightarrow-\infty$
+- 当 $p_{real}(x)\rightarrow1,\ p_{G}(x)\rightarrow0$ 时， $p_G(x)\log\frac{p_{real}(x)}{p_G(x)}\rightarrow0$
 
 这意味着：
 
-- 真实分布$P_{G}$中很少出现的图像，但生成器经常生成，这会极大增加KL散度；
-- 真实分布$P_{G}$中常见的图像，但生成器从不生成，这对KL散度几乎无影响
+- 真实分布 $P_{G}$ 中很少出现的图像，但生成器经常生成，这会极大增加KL散度；
+- 真实分布 $P_{G}$ 中常见的图像，但生成器从不生成，这对KL散度几乎无影响
 
 这种非对称性鼓励生成器保守地生成图像，即躲在安全区内只生成置信度较高的图像，因此会导致多样性缺失的问题。
 
@@ -98,7 +98,7 @@ WGAN中考虑用Earth-Moving（或称作Wasserstein距离）替代JS散度:
 
 $$EM(P||Q) = \mathop{inf}\limits_{\gamma\sim\prod(P,Q)}\mathbb{E}_{(x,y)\sim\gamma}||x-y||$$
 ，其中:
-- $\prod(P,Q)$是所有边缘分布为P和Q的联合分布组成的集合；
+- $\prod(P,Q)$ 是所有边缘分布为P和Q的联合分布组成的集合；
 - EM/Wasserstein距离：分布P变成分布Q的“最短路径”
 
 Kantorovich-Rubinstein对偶理论可以证明EM距离等价于：
@@ -108,28 +108,29 @@ $$\begin{equation}EM(P||Q) = \frac{1}{K}\mathop{sup}\limits_{||f||_{L}\leq K}\
 当我们因此当我们
 
   1. 将D限制在L-K连续的范畴中 并且
-  2. 迭代训练D使得$\mathbb{E}_{x\sim p_{data}(x)}[D(x)] - \mathbb{E}_{z}[D(G(z))]$最大化
+  2. 迭代训练D使得 $\mathbb{E}_ {x\sim p_{data}(x)}[D(x)] - \mathbb{E}_{z}[D(G(z))]$ 最大化
 
 ，此时得到的
 
-$$D^*\approx\mathop{argsup}\limits_{f:||f||_L\leq K}\left( \mathbb{E}[f(P_{data})] - \mathbb{E}[D(Z)] \right)$$
+$$D^ * \approx\mathop{argsup}\limits_ {f:||f||_ L\leq K}\left( \mathbb{E}[f(P_ {data})] - \mathbb{E}[D(Z)] \right)$$
 
 因此此时再训练G使得
-$$\mathop{min}\limits_{G}\left( \mathbb{E}_{x\sim p_{data}(x)}[D^*(x)] - \mathbb{E}_{z}[D^*(G(z))] \right)$$
 
-近似等价于最小化真实分布和G伪造的数据分布之间的EM距离$EM(P_{real}||P_{g})$ 
+$$\mathop{min}\limits_ {G}\left( \mathbb{E}_ {x\sim p_ {data}(x)}[D^ * (x)] - \mathbb{E}_ {z}[D^ * (G(z))] \right)$$
+
+近似等价于最小化真实分布和G伪造的数据分布之间的EM距离 $EM(P_{real}||P_{g})$ 
 
 <br>
 
 注意到
 1. WGAN的损失函数调整为
-$$\mathbb{E}_{x\sim p_{data}(x)}[D(x)] - \mathbb{E}_{z}[D(G(z))]$$
+$$\mathbb{E}_ {x\sim p_{data}(x)}[D(x)] - \mathbb{E}_ {z}[D(G(z))]$$
 对比GAN中的
-$$\mathbb{E}_{x\sim p_{data}(x)}\left[log(D(x)\right] + \mathbb{E}_{z\sim p_{z}(z)}\left[log(1-D(G(z))\right]$$
-2. 我们需要训练D去拟合达到（1）中sup条件的$f$，我们有$f$为K-Lipschiz连续的限制，因此我们设计的鉴别器模型也应当是L-K连续的。为保证这一条件，3.  我们并没有$f:x\mapsto [0, 1]$ 的假定，因此鉴别器D的最后一层无需添加sigmoid层
-4. 为了使D能够更好拟合满足$\mathop{sup}\limits_{||f||_L\leq K}$ 的$f$，我们会对D训练多轮，因此D和G的训练频次n：1比例往往较大（对比GAN往往1：1地训练D和G）
+$$\mathbb{E}_ {x\sim p_{data}(x)}\left[log(D(x)\right] + \mathbb{E}_ {z\sim p_{z}(z)}\left[log(1-D(G(z))\right]$$
+2. 我们需要训练D去拟合达到（1）中sup条件的 $f$ ，我们有 $f$ 为K-Lipschiz连续的限制，因此我们设计的鉴别器模型也应当是L-K连续的。为保证这一条件，3.  我们并没有 $f:x\mapsto [0, 1]$ 的假定，因此鉴别器D的最后一层无需添加sigmoid层
+4. 为了使D能够更好拟合满足 $\mathop{sup}\limits_{||f||_L\leq K}$ 的 $f$ ，我们会对D训练多轮，因此D和G的训练频次n：1比例往往较大（对比GAN往往1：1地训练D和G）
 5. 当固定G，多轮训练D后，损失函数近似等价于最小化真实分布和G伪造的数据分布之间的EM距离
-$$\mathbb{E}_{x\sim p_{data}(x)}[D(x)] - \mathbb{E}_{z}[D(G(z))]\approx EM\left(P_{data}||G\left(z\right)\right)$$
+$$\mathbb{E}_ {x\sim p_{data}(x)}[D(x)] - \mathbb{E}_ {z}[D(G(z))]\approx EM\left(P_{data}||G\left(z\right)\right)$$
 ，该损失函数直接量化了伪造数据和真实数据的差异，因此可以被用来作为评价指标来判断生成器模型是否训练充分
 
 <br>
@@ -141,11 +142,11 @@ $$\mathbb{E}_{x\sim p_{data}(x)}[D(x)] - \mathbb{E}_{z}[D(G(z))]\approx EM\le
 #### 1. **优化目标取消log**  
 首先，WGANs将优化目标从NIPS 2016修改版GANs的
 
-$$\mathop{min}\limits_{G}\mathop{max}\limits_{D}\{\mathbb{E}_{x\sim p_{data}(x)}\left[\log(D(x))\right]-\mathbb{E}_{z\sim p_{z}(z)}\left[\log(D(G(z)))\right]\}$$
+$$\mathop{min}\limits_{G}\mathop{max}\limits_{D}\{\mathbb{E}_ {x\sim p_{data}(x)}\left[\log(D(x))\right]-\mathbb{E}_ {z\sim p_{z}(z)}\left[\log(D(G(z)))\right]\}$$
 
-取消$\log$，进而修改为
+取消 $\log$ ，进而修改为
 
-$$\mathop{min}\limits_{G}\mathop{max}\limits_{D}\{\mathbb{E}_{x\sim p_{data}(x)}[D(x)] - \mathbb{E}_{z\sim p_{z}(z)}[D(G(z))]\}$$
+$$\mathop{min}\limits_{G}\mathop{max}\limits_{D}\{\mathbb{E}_ {x\sim p_{data}(x)}[D(x)] - \mathbb{E}_ {z\sim p_{z}(z)}[D(G(z))]\}$$
 
 <br>
 
