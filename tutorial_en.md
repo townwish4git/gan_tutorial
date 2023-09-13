@@ -441,7 +441,7 @@ for epoch in range(0, len(image_list), 5):
     show_list.append([plt.imshow(image_list[epoch], cmap='gray')])
 
 ani = animation.ArtistAnimation(fig, show_list, interval=1000, repeat_delay=1000, blit=True)
-ani.save('train_test.gif', writer='pillow', fps=1)
+ani.save('train_test.gif', writer='pillow', fps=3)
 ```
 
 <p align="center"><img src="./img/train_test.gif" width=80%></p>
