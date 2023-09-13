@@ -166,7 +166,7 @@ plt.show()
 生成器 $G$ 将隐空间中的向量 $z$ 映射到图像空间，从而生成伪造的图片。由于我们的训练数据是MNIST数据集中的手写图像，因此将 $z$ 映射到图像空间意味着最终生成一个与训练图像大小（1x28x28）相同的灰度图。在实践中，我们通常使用神经网络作为生成器，关于生成器模型结构的具体设计是GANs研究的一个重要方向。  
 <br>
 
-本教程中我们沿用原始论文中的设定，尝试使用多层感知机（Multilayer Perceptron，MLP）作为生成器模型，模型接受维度为`latent_dim`一维向量 $z$ 为输入，输出大小为1x28x28的图像数据。该模型由五层全连接层`mindspore.nn.Dense()`构成，除第一层和最后一层以外都后接`mindspore.nn.BatchNorm1d()`做批归一化，除最后一层以外都后接`mindspore.nn.ReLU()`作为激活函数，最后一层后接mindspore.nn.Tanh()将生成图像的像素值归一化到 $[-1,1]$ 范围内。
+本教程中我们沿用原始论文中的设定，尝试使用多层感知机（Multilayer Perceptron，MLP）作为生成器模型，模型接受维度为`latent_dim`一维向量 $z$ 为输入，输出大小为1x28x28的图像数据。该模型由五层全连接层`mindspore.nn.Dense()`构成，除第一层和最后一层以外都后接`mindspore.nn.BatchNorm1d()`做批归一化，除最后一层以外都后接`mindspore.nn.ReLU()`作为激活函数，最后一层后接`mindspore.nn.Tanh()`将生成图像的像素值归一化到 $[-1,1]$ 范围内。
 
 ```python
 # 生成器模型构造
