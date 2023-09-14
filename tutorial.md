@@ -58,7 +58,7 @@ $$\begin{equation}\mathop{min}\limits_{G}\mathop{max}\limits_{D}V(D,G)=\mathbb{E
 
 |Hardware|MindSpore Version|Status|
 |---|---|---|
-|Ascend|2.0.0|✔️|
+|Ascend910|2.0.0|✔️|
 |GPU with CUDA 11.1|2.0.0|✔️|
 ||2.1.0|✔️|
 ||master|?|
