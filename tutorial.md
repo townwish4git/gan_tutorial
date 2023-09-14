@@ -166,7 +166,7 @@ plt.show()
 生成器 $G$ 将隐空间中的向量 $z$ 映射到图像空间，从而生成伪造的图片。由于我们的训练数据是MNIST数据集中的手写图像，因此将 $z$ 映射到图像空间意味着最终生成一个与训练图像大小（1x28x28）相同的灰度图。在实践中，我们通常使用神经网络作为生成器，关于生成器模型结构的具体设计是GANs研究的一个重要方向。  
 <br>
 
-本教程中我们沿用原始论文中的设定，尝试使用多层感知机（Multilayer Perceptron，MLP）作为生成器模型，模型接受维度为`latent_dim`一维向量 $z$ 为输入，输出大小为1x28x28的图像数据。该模型由五层全连接层`mindspore.nn.Dense()`构成，除第一层和最后一层以外都后接`mindspore.nn.BatchNorm1d()`做批归一化，除最后一层以外都后接`mindspore.nn.ReLU()`作为激活函数，最后一层后接mindspore.nn.Tanh()将生成图像的像素值归一化到 $[-1,1]$ 范围内。
+本教程中我们沿用原始论文中的设定，尝试使用多层感知机（Multilayer Perceptron，MLP）作为生成器模型，模型接受维度为`latent_dim`一维向量 $z$ 为输入，输出大小为1x28x28的图像数据。该模型由五层全连接层`mindspore.nn.Dense()`构成，除第一层和最后一层以外都后接`mindspore.nn.BatchNorm1d()`做批归一化，除最后一层以外都后接`mindspore.nn.ReLU()`作为激活函数，最后一层后接`mindspore.nn.Tanh()`将生成图像的像素值归一化到 $[-1,1]$ 范围内。
 
 ```python
 # 生成器模型构造
@@ -214,7 +214,7 @@ net_g.update_parameters_name('generator')
 判别器 $D$ 是一个二元分类网络， $D$ 接受图像数据作为输入，并输出该图像取自真实数据分布的概率。事实上这种二元分类模型在过往发展中有过许多相关研究，并且仍在不断采纳新的计算机视觉判别模型推陈出新。  
 <br>
 
-本教程中我们沿用原始论文的设定，仍尝试使用多层感知机作为判别器模型。模型输入为大小1x28x28的图像数据，输出 $[0,1]$ 之间的标量。模型由三层全连接层`mindspore.nn.Dense()`构成，除最后一层以外都后接`mindspore.nn.ReLU()`作为激活函数，最后一层后接`mindspore.nn.Sigmoid()`将输出值规范到 $[0,1]$ 之间。
+本教程中我们沿用原始论文的设定，仍尝试使用多层感知机作为判别器模型。模型输入为大小1x28x28的图像数据，输出 $[0,1]$ 之间的标量。模型由三层全连接层`mindspore.nn.Dense()`构成，除最后一层以外都后接`mindspore.nn.LeakyReLU()`作为激活函数，最后一层后接`mindspore.nn.Sigmoid()`将输出值规范到 $[0,1]$ 之间。
 
 ```python
 # 判别器模型构造
@@ -427,7 +427,7 @@ for epoch in range(0, len(image_list), 5):
     show_list.append([plt.imshow(image_list[epoch], cmap='gray')])
 
 ani = animation.ArtistAnimation(fig, show_list, interval=1000, repeat_delay=1000, blit=True)
-ani.save('train_test.gif', writer='pillow', fps=1)
+ani.save('train_test.gif', writer='pillow', fps=3)
 ```
 
 <p align="center"><img src="./img/train_test.gif" width=80%></p>
