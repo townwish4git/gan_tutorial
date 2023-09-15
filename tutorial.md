@@ -56,17 +56,6 @@ $$\begin{equation}\mathop{min}\limits_{G}\mathop{max}\limits_{D}V(D,G)=\mathbb{E
 
 本案例将使用MNIST手写数字数据集作为真实数据分布来训练一个生成式对抗网络，我们使用GAN模拟生成手写数字图片。  
 
-|Hardware|MindSpore Version|Status|
-|---|---|---|
-|Ascend910|2.0.0|✔️|
-|GPU with CUDA 11.1|2.0.0|✔️|
-||2.1.0|✔️|
-||master|?|
-|CPU|2.0.0|✔️|
-||2.1.0|✔️|
-||master|?|
-
-
 ```python
 import os
 import time
